@@ -9,8 +9,9 @@ class TestsParser(unittest.TestCase):
 
     def test_0(self):
 
-        file_list = Database()
+        database = Database()
         parser = Parser()
+        snapshot = parser.parse_database(database)
 
         self.assertEqual(0, 1)
 

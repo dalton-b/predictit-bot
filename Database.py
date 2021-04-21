@@ -3,6 +3,7 @@ import os
 
 
 class Database:
+
     def __init__(self):
 
         self._file_list = {}
@@ -11,4 +12,7 @@ class Database:
         for file in glob.glob("*.txt"):
             with open(file, "r") as f:
                 self._file_list[file] = f.read()
-        pass
+
+    @property
+    def file_list(self):
+        return self._file_list
