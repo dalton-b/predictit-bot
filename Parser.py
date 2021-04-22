@@ -1,3 +1,4 @@
+from Market import Market
 from Snapshot import Snapshot
 from datetime import datetime
 import json
@@ -18,9 +19,10 @@ class Parser:
     def parse_snapshot(self, key, value):
         snapshot = Snapshot()
         snapshot.time = datetime.strptime(key[:-len(".txt")], "%Y-%m-%d-%H-%M-%S")
-        markets = json.loads(value)['markets']
-
+        markets_dict = json.loads(value)['markets']
+        markets = []
+        for market_dict in markets_dict:
+            markets.append(Market(market_dict))
+        snapshot.markets = markets
 
         return snapshot
-
-()

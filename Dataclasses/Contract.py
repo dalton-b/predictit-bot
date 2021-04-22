@@ -1,7 +1,5 @@
-class Contract:
+class Contract(object):
 
-    def __init__(self, json):
-        self.parse_jason()
-
-    def parse_json(self):
-        pass
+    def __init__(self, contract):
+        for key in contract:
+            setattr(self, key, contract[key])
