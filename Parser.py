@@ -1,4 +1,6 @@
 from Snapshot import Snapshot
+from datetime import datetime
+import json
 
 
 class Parser:
@@ -15,6 +17,10 @@ class Parser:
 
     def parse_snapshot(self, key, value):
         snapshot = Snapshot()
-        
+        snapshot.time = datetime.strptime(key[:-len(".txt")], "%Y-%m-%d-%H-%M-%S")
+        markets = json.loads(value)['markets']
+
+
         return snapshot
 
+()

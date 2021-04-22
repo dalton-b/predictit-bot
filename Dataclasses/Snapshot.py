@@ -1,6 +1,3 @@
-from Parser import Parser
-
-
 class Snapshot:
     def __init__(self):
 

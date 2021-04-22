@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+import json
 
 
 class DataCollector:
@@ -8,14 +9,14 @@ class DataCollector:
         self._response = None
 
     def collect_data(self):
-        self.response = requests.get(self._endpoint)
+        self.response = requests.get(self._endpoint).json()
 
     def export_content(self):
         current_time = get_current_time()
         data_filepath = create_data_filepath(current_time)
 
         with open(data_filepath, "w") as text_file:
-            print(self.response.content, file=text_file)
+            json.dump(self.response, text_file)
 
     @property
     def response(self):
