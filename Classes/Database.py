@@ -1,6 +1,8 @@
 import glob
 import os
 
+from Snapshot import Snapshot
+
 
 class Database:
 
@@ -13,6 +15,15 @@ class Database:
             with open(file, "r") as f:
                 self._file_list[file] = f.read()
 
+        self._snapshots = []
+
+        for file_name, file_contents in self.file_list.items():
+            self._snapshots.append(Snapshot(file_name, file_contents))
+
     @property
     def file_list(self):
         return self._file_list
+
+    @property
+    def snapshots(self):
+        return self._snapshots

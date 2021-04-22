@@ -1,5 +1,5 @@
 import unittest
-from DataCollector import DataCollector
+from Classes.DataCollector import DataCollector
 
 
 class TestsDataCollector(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-import TestsDataCollector
+from Classes.Tests import TestsDataCollector
 
 
 def run_data_collector_tests():

@@ -13,4 +13,3 @@ class Market(object):
             contracts.append(Contract(contract))
 
         self.contracts = contracts
-        pass
