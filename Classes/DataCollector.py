@@ -40,6 +40,6 @@ def get_current_time():
     return current_time_string
 
 
-def create_data_filepath(currnet_time):
-    full_filepath = "data_logs/" + currnet_time + ".txt"
+def create_data_filepath(current_time):
+    full_filepath = "data_logs/" + current_time + ".txt"
     return full_filepath
