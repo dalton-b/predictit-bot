@@ -7,7 +7,7 @@ class TestsDataCollector(unittest.TestCase):
     def test_error_code(self):
         data_collector = DataCollector()
         data_collector.collect_data()
-        self.assertEqual(200, data_collector.response.status_code)
+        self.assertEqual(200, data_collector.status_code)
 
     def test_content_not_null(self):
         data_collector = DataCollector()

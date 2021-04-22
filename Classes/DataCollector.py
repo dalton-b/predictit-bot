@@ -7,9 +7,12 @@ class DataCollector:
     def __init__(self):
         self._endpoint = 'https://www.predictit.org/api/marketdata/all/'
         self._response = None
+        self._status_code = None
 
     def collect_data(self):
-        self.response = requests.get(self._endpoint).json()
+        raw_response = requests.get(self._endpoint)
+        self._response = raw_response.json()
+        self._status_code = raw_response.status_code
 
     def export_content(self):
         current_time = get_current_time()
@@ -25,6 +28,10 @@ class DataCollector:
     @response.setter
     def response(self, response):
         self._response = response
+
+    @property
+    def status_code(self):
+        return self._status_code
 
 
 def get_current_time():

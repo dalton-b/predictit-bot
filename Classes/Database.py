@@ -9,11 +9,13 @@ class Database:
     def __init__(self):
 
         self._file_list = {}
+        self._root = os.path.dirname(os.path.dirname(__file__))
+        self._directory = "data_logs"
 
-        os.chdir("data_logs")
-        for file in glob.glob("*.txt"):
-            with open(file, "r") as f:
-                self._file_list[file] = f.read()
+        for file in os.listdir(self._root + "/" + self._directory):
+            if file.endswith(".txt"):
+                with open(self._root + "/" + self._directory + "/" + file, "r") as f:
+                    self._file_list[file] = f.read()
 
         self._snapshots = []
 
@@ -27,3 +29,7 @@ class Database:
     @property
     def snapshots(self):
         return self._snapshots
+
+    @property
+    def directory(self):
+        return self._directory
