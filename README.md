@@ -10,7 +10,7 @@ To run this project, run the following terminal commands
 python3 -m venv ./env
 source ./env/bin/activate
 pip3 install -r requirements.txt
-python3 Driver.py
+python3 Classes/Drivers/MainDriver.py
 
 # When you're done, exit the virtual environment with
 deactivate
