@@ -26,6 +26,11 @@ class TestsDatabase(unittest.TestCase):
                     contracts = len(market.contracts)
         self.assertTrue(contracts > 0)
 
+    def test_one_contract_has_id(self):
+        database = Database()
+        contract_id = database.snapshots[0].markets[0].get_contracts[0].id
+        self.assertTrue(isinstance(contract_id, int))
+
 
 if __name__ == '__main__':
     unittest.main()
