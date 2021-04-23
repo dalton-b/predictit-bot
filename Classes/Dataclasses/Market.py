@@ -1,4 +1,4 @@
-from Contract import Contract
+from Classes.Dataclasses.Contract import Contract
 
 
 class Market(object):

@@ -1,5 +1,5 @@
 import os
-from Snapshot import Snapshot
+from Classes.Dataclasses.Snapshot import Snapshot
 
 
 class Database:

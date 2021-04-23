@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from Market import Market
+from Classes.Dataclasses.Market import Market
 
 
 class Snapshot:
