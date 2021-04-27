@@ -7,6 +7,7 @@ class Database:
     def __init__(self):
 
         self._data_log_directory = "data_logs"
+        # TODO: Make this use the FileManager
         self._root = self.get_root_directory()
         self._data_log_path = self.get_data_log_path()
         self._file_list = self.get_file_list()
@@ -16,6 +17,7 @@ class Database:
     def get_root_directory():
         return os.path.dirname(os.path.dirname(__file__))
 
+    # TODO: Make this use the FileManager too
     def get_data_log_path(self):
         return self._root + "/" + self._data_log_directory
 
