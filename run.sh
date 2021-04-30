@@ -8,7 +8,7 @@ source ./env/bin/activate
 echo "Installing packages..."
 pip3 install -r requirements.txt
 echo "Running the project..."
-# python3 MainDriver.py
+python3 MainDriver.py
 echo "Setting GitHub username..."
 git config user.name "dalton-b"
 echo "Staging changes..."
