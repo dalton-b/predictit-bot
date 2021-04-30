@@ -36,9 +36,8 @@ jobs:
           bash run.sh
       - name: Commit to predictit-bot
         run: |
-          ls
-          git status
-          git config user.name "dalton-b"
+          cd predictit-bot
+          git config --local user.name "dalton-b"
           git commit -m "Daily update" -a
       - name: Push changes to preditcit-bot
         uses: ad-m/github-push-action@master
@@ -47,8 +46,9 @@ jobs:
           branch: ${{ github.ref }}
       - name: Copy to dbdotcom
         run: |
-          cp predictit-forecasting.html ../dbdotcom
-          cd ../dbdotcom
+          cp predictit-bot/predictit-forecasting.html dbdotcom
+          cd dbdotcom
+          git config --local user.name "dalton-b"
           git add .
           git commit -m "Daily update" -a
       - name: Push changes to dbdotcom
