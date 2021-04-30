@@ -32,7 +32,14 @@ jobs:
           path: dbdotcom
       - name: Update data
         run: |
-          bash run.sh
+          ls
+          cd predictit-bot
+          ls
+          cd ..
+          ls
+          cd dbdotcom
+          ls
+        # bash run.sh
       # - name: Commit files
       #   run: |
       #     git config --local user.name "dalton-b"
