@@ -10,4 +10,5 @@ data_collector.export_content()
 database = Database()
 # TODO: Create a NumberCruncher that takes a database and outputs a dictionary that the htmlwriter uses to write
 html_writer = HTMLWriter()
-
+html_writer.write_html("predictit-forecasting.html")
+print("MainDriver run complete!")
