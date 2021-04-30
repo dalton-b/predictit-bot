@@ -1,9 +1,8 @@
 name: main
 
 on:
-  # schedule:
-  #   - cron: "0 15 * * *" # runs every day at 3pm
-  push
+  schedule:
+    - cron: "0 15 * * *" # runs every day at 3pm
 
 jobs:
   build:
@@ -13,7 +12,6 @@ jobs:
         python-version: [3.8]
     
     steps:
-      # - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
@@ -23,7 +21,7 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Checkout predictit-bot
         uses: actions/checkout@v2
-      - name: Update data
+      - name: Run shell script
         run: |
           bash run.sh
       - name: Commit to predictit-bot
