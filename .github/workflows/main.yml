@@ -33,13 +33,13 @@ jobs:
       - name: Update data
         run: |
           bash run.sh
-      - name: Commit files
-        run: |
-          git config --local user.name "dalton-b"
-          git commit -m "Daily update" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      # - name: Commit files
+      #   run: |
+      #     git config --local user.name "dalton-b"
+      #     git commit -m "Daily update" -a
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
 
