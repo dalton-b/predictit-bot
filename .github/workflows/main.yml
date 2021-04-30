@@ -23,20 +23,11 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Checkout predictit-bot
         uses: actions/checkout@v2
-        with:
-          path: predictit-bot
-      - name: Checkout dbdotcom
-        uses: actions/checkout@v2
-        with:
-          repository: dalton-b/dbdotcom
-          path: dbdotcom
       - name: Update data
         run: |
-          cd predictit-bot
           bash run.sh
       - name: Commit to predictit-bot
         run: |
-          cd predictit-bot
           git config --local user.name "dalton-b"
           git commit -m "Daily update" -a
       - name: Push changes to preditcit-bot
@@ -45,17 +36,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
           directory: predictit-bot
-      - name: Copy to dbdotcom
-        run: |
-          cp predictit-bot/predictit-forecasting.html dbdotcom
-          cd dbdotcom
-          git config --local user.name "dalton-b"
-          git add .
-          git commit -m "Daily update" -a
-      - name: Push changes to dbdotcom
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.DBDOTCOM_DEPLOY_KEY }}
-          branch: master
-          directory: dbdotcom
-          repository: dalton-b/dbdotcom
