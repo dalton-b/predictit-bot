@@ -30,6 +30,11 @@ jobs:
         with:
           repository: dalton-b/dbdotcom
           path: dbdotcom
+      - name: Pull and fetch dbdotcom
+        run: |
+          cd dbdotcom
+          git fetch
+          git pull
       - name: Update data
         run: |
           cd predictit-bot
