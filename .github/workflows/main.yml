@@ -23,7 +23,8 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Checkout predictit-bot
         uses: actions/checkout@v2
-        with: { ref: master }
+        with:
+          repository: dalton-b/predictit-bot
           path: predictit-bot
       - name: Checkout dbdotcom
         uses: actions/checkout@v2
