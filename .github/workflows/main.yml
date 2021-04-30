@@ -1,8 +1,9 @@
 name: main
 
 on:
-  schedule:
-    - cron: "0 15 * * *" # runs every day at 3pm
+  # schedule:
+  #   - cron: "0 15 * * *" # runs every day at 3pm
+  push
 
 jobs:
   build:
@@ -16,16 +17,18 @@ jobs:
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          # Semantic version range syntax or exact version of a Python version
           python-version: '3.8' 
-          # Optional - x64 or x86 architecture, defaults to x64
           architecture: 'x64' 
-      # You can test your matrix by printing the current Python version
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-      - name: Git checkout
+      - name: Checkout predictit-bot
         uses: actions/checkout@v2
         with: { ref: master }
+      - name: Checkout dbdotcom
+        uses: actions/checkout@v2
+        with:
+          repository: dalton-b/dbdotcom
+          path: dbdotcom
       - name: Update data
         run: |
           bash run.sh
