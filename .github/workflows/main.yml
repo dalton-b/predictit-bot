@@ -52,16 +52,17 @@ jobs:
           git config --local user.name "dalton-b"
           git add .
           git commit -m "Daily update" -a
-      - name: Pull and fetch dbdotcom
-        run: |
-          cd dbdotcom
-          git fetch
-          git pull
+      # - name: Check 
+      #   run: |
+      #     cd dbdotcom
+      #     git fetch
+      #     git pull
       - name: Push changes to dbdotcom
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
+          force: true
           directory: dbdotcom
 
 
