@@ -30,6 +30,7 @@ jobs:
         with:
           repository: dalton-b/dbdotcom
           path: dbdotcom
+          fetch-depth: 0
       - name: Update data
         run: |
           cd predictit-bot
