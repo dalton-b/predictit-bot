@@ -24,6 +24,7 @@ jobs:
       - name: Checkout predictit-bot
         uses: actions/checkout@v2
         with: { ref: master }
+          path: predictit-bot
       - name: Checkout dbdotcom
         uses: actions/checkout@v2
         with:
