@@ -18,7 +18,7 @@ class HTMLWriter:
 \t</body>
 </html>"""
 
-    def write_html(self, file_name):
+    def write(self, file_name):
 
         full_file_path = self.file_manager.combine_file_path_and_name(self.file_manager.root_dir, file_name)
 

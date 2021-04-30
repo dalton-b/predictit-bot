@@ -18,3 +18,6 @@ class FileManager:
     def combine_file_path_and_name(file_path, file_name):
         # TODO: Detect OS and react appropriately
         return file_path + "/" + file_name
+
+    def combine_root_dir_and_file_name(self, file_name):
+        return self.combine_file_path_and_name(self.root_dir, file_name)

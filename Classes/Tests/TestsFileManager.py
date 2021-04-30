@@ -4,7 +4,7 @@ import unittest
 # TODO: Fill this with tests
 class TestsFileManager(unittest.TestCase):
 
-    def test(self):
+    def test_0(self):
         self.assertTrue(0, 1)
 
 
