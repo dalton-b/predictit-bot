@@ -41,6 +41,8 @@ jobs:
           git commit -m "Daily update" -a
       - name: Push changes to preditcit-bot
         uses: ad-m/github-push-action@master
+        run: |
+          cd predictit-bot
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
