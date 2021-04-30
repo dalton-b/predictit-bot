@@ -22,4 +22,5 @@ jobs:
         destination_folder: ''
         user_email: 'daltonbassett@gmail.com'
         user_name: 'dalton-b'
+        destination_branch: 'master'
         commit_message: 'Test of the push_html action'
