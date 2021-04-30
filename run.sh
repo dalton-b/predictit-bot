@@ -1,6 +1,5 @@
 #!/bin/bash
 echo "Starting run.sh..."
-ls
 echo "Creating virtual environment..."
 python3 -m venv ./env
 echo "Activating environment..."
