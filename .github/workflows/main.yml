@@ -50,9 +50,9 @@ jobs:
           git add .
           git commit -m "Daily update" -a
       - name: Push changes to dbdotcom
-          uses: ad-m/github-push-action@master
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            branch: master
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
 
 
