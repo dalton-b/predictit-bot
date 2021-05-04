@@ -1,5 +1,5 @@
 import unittest
-from Classes.Tests import TestsDataCollector, TestsDatabase
+from Classes.Tests import TestsDataCollector, TestsDatabase, TestsHTMLWriter
 
 
 def run_data_collector_tests():
@@ -14,6 +14,13 @@ def run_database_tests():
     unittest.TextTestRunner().run(suite)
 
 
+def run_html_writer_tests():
+    print("Running HTMLWriter tests...")
+    suite = unittest.TestLoader().loadTestsFromModule(TestsHTMLWriter)
+    unittest.TextTestRunner().run(suite)
+
+
 if __name__ == '__main__':
     run_data_collector_tests()
     run_database_tests()
+    run_html_writer_tests()
