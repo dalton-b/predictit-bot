@@ -79,7 +79,7 @@ class NumberCruncher:
         final_yes = self.parse_contract(final_contract)
         current_yes = self.parse_contract(current_contract)
         # bias += (self.parse_cost(final_contract.bestBuyNoCost) - self.parse_cost(current_contract.bestBuyNoCost))
-        bias += final_yes - current_yes
+        bias += current_yes - final_yes
         # bias += (self.parse_cost(final_contract.bestSellNoCost) - self.parse_cost(current_contract.bestSellNoCost))
         # bias += (self.parse_cost(final_contract.bestSellYesCost) - self.parse_cost(current_contract.bestSellYesCost))
         return bias
