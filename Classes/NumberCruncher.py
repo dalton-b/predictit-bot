@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from Classes.Graph_Objects.Point import Point
 
 
 class NumberCruncher:
@@ -44,12 +45,12 @@ class NumberCruncher:
                     contracts_lookback[i] = contracts
             closed_contracts[closed_id] = contracts_lookback
 
-        day_bias = {}
+        points = []
         for i in range(0, 90):
             bias = 0.0
             bias_denominator = 0.0
             for key, contracts in closed_contracts.items():
-                if key == 7221 and i == 6:
+                if key == 7105 and i == 3:
                     hi = 0
 
                 try:
@@ -59,9 +60,8 @@ class NumberCruncher:
                 except(KeyError):
                     pass
             if bias_denominator != 0.0:
-                day_bias[i] = bias / bias_denominator
-
-        # Store the bias for a given day in a date dictionary with keys 1-90, representing days before market close
+                points.append(Point(i, bias, bias_denominator))
+                # day_bias[i] = bias / bias_denominator
 
         return None
 
@@ -76,19 +76,20 @@ class NumberCruncher:
 
     def get_bias(self, final_contract, current_contract):
         bias = 0
-
-        bias += (self.parse_cost(final_contract.bestBuyNoCost) - self.parse_cost(current_contract.bestBuyNoCost))
-        bias += (self.parse_cost(final_contract.bestBuyYesCost) - self.parse_cost(current_contract.bestBuyYesCost))
-        bias += (self.parse_cost(final_contract.bestSellNoCost) - self.parse_cost(current_contract.bestSellNoCost))
-        bias += (self.parse_cost(final_contract.bestSellYesCost) - self.parse_cost(current_contract.bestSellYesCost))
+        final_yes = self.parse_contract(final_contract)
+        current_yes = self.parse_contract(current_contract)
+        # bias += (self.parse_cost(final_contract.bestBuyNoCost) - self.parse_cost(current_contract.bestBuyNoCost))
+        bias += final_yes - current_yes
+        # bias += (self.parse_cost(final_contract.bestSellNoCost) - self.parse_cost(current_contract.bestSellNoCost))
+        # bias += (self.parse_cost(final_contract.bestSellYesCost) - self.parse_cost(current_contract.bestSellYesCost))
         return bias
 
     @staticmethod
-    def parse_cost(cost):
-        if cost is not None:
-            return cost
+    def parse_contract(contract):
+        if contract.bestBuyYesCost is not None:
+            return contract.bestBuyYesCost
         else:
-            return float(0.0)
+            return contract.bestSellYesCost
 
     @property
     def snapshots(self):
