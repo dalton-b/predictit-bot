@@ -76,51 +76,21 @@ class NumberCruncher:
 
     def get_bias(self, final_contract, current_contract):
         bias = 0
-        correct_answer = self.parse_correct(final_contract)
-        final_correct = self.parse_contract(final_contract, correct_answer)
-        current_correct = self.parse_contract(current_contract, correct_answer)
+        final_yes = self.parse_contract(final_contract)
+        current_yes = self.parse_contract(current_contract)
         # bias += (self.parse_cost(final_contract.bestBuyNoCost) - self.parse_cost(current_contract.bestBuyNoCost))
-        bias += current_correct - final_correct
+        bias += current_yes - final_yes
         # bias += (self.parse_cost(final_contract.bestSellNoCost) - self.parse_cost(current_contract.bestSellNoCost))
         # bias += (self.parse_cost(final_contract.bestSellYesCost) - self.parse_cost(current_contract.bestSellYesCost))
         return bias
 
     @staticmethod
-    def parse_contract(contract, correct_answer):
+    def parse_contract(contract):
 
-        if correct_answer == "yes":
-            if contract.bestBuyYesCost is not None:
-                return contract.bestBuyYesCost
-            else:
-                return contract.bestSellYesCost
-
-        if correct_answer == "no":
-            if contract.bestBuyNoCost is not None:
-                return contract.bestBuyNoCost
-            else:
-                return contract.bestSellNoCost
-
-    @staticmethod
-    def parse_correct(contract):
-        best_buy_yes = contract.bestBuyYesCost
-        best_sell_yes = contract.bestSellYesCost
-        best_buy_no = contract.bestBuyNoCost
-        best_sell_no = contract.bestSellNoCost
-
-        if best_buy_yes is not None:
-            yes = best_buy_yes
+        if contract.bestBuyYesCost is not None:
+            return contract.bestBuyYesCost
         else:
-            yes = best_sell_yes
-
-        if best_buy_no is not None:
-            no = best_buy_no
-        else:
-            no = best_sell_no
-
-        if yes >= no:
-            return "yes"
-        else:
-            return "no"
+            return contract.bestSellYesCost
 
     @property
     def snapshots(self):
