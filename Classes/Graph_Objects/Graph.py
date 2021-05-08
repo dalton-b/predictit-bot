@@ -1,7 +1,7 @@
 class Graph:
 
-    def __init__(self):
-        pass
+    def __init__(self, points):
+        self._points = points
 
     @property
     def points(self):

@@ -6,18 +6,43 @@ from Classes.NumberCruncher import NumberCruncher
 
 
 class TestsNumberCruncher(unittest.TestCase):
+    #
+    # def test_initialize(self):
+    #     database = Database()
+    #     number_cruncher = NumberCruncher(database.snapshots)
+    #     self.assertTrue(len(number_cruncher.snapshots) > 0)
+    #
+    # def test_graph_has_points(self):
+    #     database = Database()
+    #     number_cruncher = NumberCruncher(database.snapshots)
+    #     graph = number_cruncher.graph
+    #     points = graph.points
+    #     self.assertTrue(len(points) > 0)
 
-    def test_initialize(self):
-        database = Database()
-        number_cruncher = NumberCruncher(database.snapshots)
-        self.assertTrue(len(number_cruncher.snapshots) > 0)
+    # def test_resolve_to_no(self):
+    #     database = Database("data_logs_tests/test_0")
+    #     number_cruncher = NumberCruncher(database.snapshots)
+    #     graph = number_cruncher.graph
+    #     self.assertTrue(graph.points[1].average_bias == -0.8)
 
-    def test_graph_has_points(self):
-        database = Database()
+    # def test_resolve_to_yes(self):
+    #     database = Database("data_logs_tests/test_1")
+    #     number_cruncher = NumberCruncher(database.snapshots)
+    #     graph = number_cruncher.graph
+    #     self.assertTrue(graph.points[1].average_bias == -0.8)
+
+    # def test_averages(self):
+    #     database = Database("data_logs_tests/test_2")
+    #     number_cruncher = NumberCruncher(database.snapshots)
+    #     graph = number_cruncher.graph
+    #     average_bias = graph.points[1].average_bias
+    #     self.assertTrue(-0.59 >= average_bias >= -0.61)
+
+    def test_overconfident(self):
+        database = Database("data_logs_tests/test_3")
         number_cruncher = NumberCruncher(database.snapshots)
         graph = number_cruncher.graph
-        points = graph.points
-        self.assertTrue(len(points) > 0)
+        self.assertTrue(graph.points[1].average_bias == 0.8)
 
 
 if __name__ == '__main__':

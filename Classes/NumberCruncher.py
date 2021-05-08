@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from Classes.Graph_Objects.Graph import Graph
 from Classes.Graph_Objects.Point import Point
 
 
@@ -13,8 +15,6 @@ class NumberCruncher:
             self._snapshots_by_date[snapshot.time.date()] = snapshot
 
         self._graph = self.crunch_numbers()
-
-
 
     def crunch_numbers(self):
         self._snapshots.sort(key=lambda x: x.time, reverse=False)
@@ -63,7 +63,7 @@ class NumberCruncher:
                 points.append(Point(i, bias, bias_denominator))
                 # day_bias[i] = bias / bias_denominator
 
-        return None
+        return Graph(points)
 
     def get_contracts_from_market_id_and_date(self, market_id, market_date):
 
