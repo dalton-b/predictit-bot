@@ -4,9 +4,9 @@ from Classes.Dataclasses.Snapshot import Snapshot
 
 class Database:
 
-    def __init__(self):
+    def __init__(self, data_log_directory="data_logs"):
 
-        self._data_log_directory = "data_logs"
+        self._data_log_directory = data_log_directory
         # TODO: Make this use the FileManager
         self._root = self.get_root_directory()
         self._data_log_path = self.get_data_log_path()
