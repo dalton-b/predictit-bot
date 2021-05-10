@@ -27,7 +27,7 @@ def run_number_cruncher_tests():
 
 
 if __name__ == '__main__':
-    # run_data_collector_tests()
+    run_data_collector_tests()
     run_database_tests()
     run_html_writer_tests()
     run_number_cruncher_tests()
