@@ -8,19 +8,20 @@ class NumberCruncher:
 
     def __init__(self, snapshots):
         self._snapshots = snapshots
-
-        # Store snapshots in a dictionary accessible by date
-        # self._snapshots_by_date = {}
-        # for snapshot in self.snapshots:
-        #     self._snapshots_by_date[snapshot.time.date()] = snapshot
-
         self._graph = self.crunch_numbers()
 
     def crunch_numbers(self):
+
+        closed_markets = self.get_closed_markets()
+        closed_contracts = self.get_closed_contracts(closed_markets)
+        points = self.get_points(closed_contracts)
+        return Graph(points)
+
+    def get_closed_markets(self):
         closed_markets = {}
         snapshot_list = list(self._snapshots.values())
         for i in range(1, len(snapshot_list)):
-            yesterdays_markets = snapshot_list[i-1].markets
+            yesterdays_markets = snapshot_list[i - 1].markets
             yesterdays_market_ids = []
             for market in yesterdays_markets:
                 yesterdays_market_ids.append(market.id)
@@ -32,9 +33,9 @@ class NumberCruncher:
             for id in closed_ids:
                 closed_markets[id] = datetime.strptime(yesterdays_markets[0].timeStamp.split("T")[0], "%Y-%m-%d").date()
 
+        return closed_markets
 
-
-        # For each closed market
+    def get_closed_contracts(self, closed_markets):
         closed_contracts = {}
         for closed_id, closed_date in closed_markets.items():
             contracts_lookback = {}
@@ -45,6 +46,9 @@ class NumberCruncher:
                     contracts_lookback[i] = contracts
             closed_contracts[closed_id] = contracts_lookback
 
+        return closed_contracts
+
+    def get_points(self, closed_contracts):
         points = []
         for i in range(0, 90):
             bias = 0.0
@@ -62,8 +66,7 @@ class NumberCruncher:
             if bias_denominator != 0.0:
                 points.append(Point(i, bias, bias_denominator))
                 # day_bias[i] = bias / bias_denominator
-
-        return Graph(points)
+        return points
 
     def get_contracts_from_market_id_and_date(self, market_id, market_date):
 
@@ -71,7 +74,7 @@ class NumberCruncher:
             for market in self._snapshots[market_date].markets:
                 if market.id == market_id:
                     return market.contracts
-        except(KeyError):
+        except KeyError:
             return None
 
     def get_bias(self, final_contract, current_contract):
