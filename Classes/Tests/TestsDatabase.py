@@ -12,7 +12,7 @@ class TestsDatabase(unittest.TestCase):
     def test_snapshots_have_markets(self):
         database = Database()
         markets = math.inf
-        for snapshot in database.snapshots:
+        for data, snapshot in database.snapshots.items():
             if len(snapshot.markets) < markets:
                 markets = len(snapshot.markets)
         self.assertTrue(markets > 0)
@@ -20,7 +20,7 @@ class TestsDatabase(unittest.TestCase):
     def test_markets_have_contracts(self):
         database = Database()
         contracts = math.inf
-        for snapshot in database.snapshots:
+        for time, snapshot in database.snapshots.items():
             for market in snapshot.markets:
                 if len(market.contracts) < contracts:
                     contracts = len(market.contracts)
@@ -28,7 +28,8 @@ class TestsDatabase(unittest.TestCase):
 
     def test_one_contract_has_id(self):
         database = Database()
-        contract_id = database.snapshots[0].markets[0].get_contracts[0].id
+        snapshot = list(database.snapshots.values())[0]
+        contract_id = snapshot.markets[0].get_contracts[0].id
         self.assertTrue(isinstance(contract_id, int))
 
 

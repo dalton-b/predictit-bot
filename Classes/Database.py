@@ -4,9 +4,9 @@ from Classes.Dataclasses.Snapshot import Snapshot
 
 class Database:
 
-    def __init__(self):
+    def __init__(self, data_log_directory="data_logs"):
 
-        self._data_log_directory = "data_logs"
+        self._data_log_directory = data_log_directory
         # TODO: Make this use the FileManager
         self._root = self.get_root_directory()
         self._data_log_path = self.get_data_log_path()
@@ -45,7 +45,23 @@ class Database:
         snapshots = []
         for file_name, file_contents in self.file_list.items():
             snapshots.append(Snapshot(file_name, file_contents))
-        return snapshots
+        snapshots_by_date = self.add_date_to_snapshots(snapshots)
+        sorted_snapshots = self.sort_snapshots(snapshots_by_date)
+        return sorted_snapshots
+
+    @staticmethod
+    def sort_snapshots(snapshots):
+        sorted_snapshots = {}
+        for date in sorted(snapshots):
+            sorted_snapshots[date] = snapshots[date]
+        return sorted_snapshots
+
+    @staticmethod
+    def add_date_to_snapshots(snapshots):
+        snapshots_by_date = {}
+        for snapshot in snapshots:
+            snapshots_by_date[snapshot.time.date()] = snapshot
+        return snapshots_by_date
 
     @property
     def file_list(self):
