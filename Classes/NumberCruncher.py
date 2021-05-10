@@ -8,68 +8,87 @@ class NumberCruncher:
 
     def __init__(self, snapshots):
         self._snapshots = snapshots
+        self._lookback = 90
         self._graph = self.crunch_numbers()
 
     def crunch_numbers(self):
 
-        closed_markets = self.get_closed_markets()
-        closed_contracts = self.get_closed_contracts(closed_markets)
-        points = self.get_points(closed_contracts)
+        closed_markets = self.get_closed_market_ids_and_dates()
+        closed_contract_states = self.get_closed_contract_states(closed_markets)
+        points = self.get_points(closed_contract_states)
         return Graph(points)
 
-    def get_closed_markets(self):
+    def get_closed_market_ids_and_dates(self):
         closed_markets = {}
         snapshot_list = list(self._snapshots.values())
         for i in range(1, len(snapshot_list)):
-            yesterdays_markets = snapshot_list[i - 1].markets
-            yesterdays_market_ids = []
-            for market in yesterdays_markets:
-                yesterdays_market_ids.append(market.id)
-            todays_markets = snapshot_list[i].markets
-            todays_market_ids = []
-            for market in todays_markets:
-                todays_market_ids.append(market.id)
-            closed_ids = [x for x in yesterdays_market_ids if x not in todays_market_ids]
-            for id in closed_ids:
-                closed_markets[id] = datetime.strptime(yesterdays_markets[0].timeStamp.split("T")[0], "%Y-%m-%d").date()
+
+            yesterday = snapshot_list[i-1]
+            today = snapshot_list[i]
+
+            yesterdays_market_ids = self.get_market_ids_from_snapshot(yesterday)
+            todays_market_ids = self.get_market_ids_from_snapshot(today)
+
+            closed_ids = self.get_closed_market_ids(yesterdays_market_ids, todays_market_ids)
+
+            for market_id in closed_ids:
+                closed_markets[market_id] = self.parse_market_date(yesterday.markets[0])
 
         return closed_markets
 
-    def get_closed_contracts(self, closed_markets):
-        closed_contracts = {}
+    @staticmethod
+    def parse_market_date(market):
+        return datetime.strptime(market.timeStamp.split("T")[0], "%Y-%m-%d").date()
+
+    @staticmethod
+    def get_closed_market_ids(yesterday_ids, today_ids):
+        closed_ids = [x for x in yesterday_ids if x not in today_ids]
+        return closed_ids
+
+    def get_closed_contract_states(self, closed_markets):
+        closed_contract_states = {}
         for closed_id, closed_date in closed_markets.items():
-            contracts_lookback = {}
-            for i in range(0, 90):
-                delta = closed_date - timedelta(days=i)
-                contracts = self.get_contracts_from_market_id_and_date(closed_id, delta)
-                if contracts is not None:
-                    contracts_lookback[i] = contracts
-            closed_contracts[closed_id] = contracts_lookback
+            contract_old_states = self.get_contract_old_states(closed_id, closed_date)
+            closed_contract_states[closed_id] = contract_old_states
 
-        return closed_contracts
+        return closed_contract_states
 
-    def get_points(self, closed_contracts):
+    def get_contract_old_states(self, closed_id, closed_date):
+        contract_old_states = {}
+        for i in range(0, self._lookback):
+            past_date = closed_date - timedelta(days=i)
+            contracts = self.get_contracts_from_market_id_and_date(closed_id, past_date)
+            if contracts is not None:
+                contract_old_states[i] = contracts
+        return contract_old_states
+
+    def get_points(self, closed_contract_states):
         points = []
-        for i in range(0, 90):
+        for i in range(0, self._lookback):
             bias = 0.0
-            bias_denominator = 0.0
-            for key, contracts in closed_contracts.items():
-                if key == 7207 and i == 9:
-                    hi = 0
-
+            num_data_points = 0
+            for key, contract_states in closed_contract_states.items():
                 try:
-                    for j in range(0, len(contracts[i])):
-                        bias += self.get_bias(contracts[0][j], contracts[i][j])
-                        bias_denominator += 1.0
-                except(KeyError):
+                    num_contracts_at_state = len(contract_states[i])
+                    for j in range(0, num_contracts_at_state):
+                        final_state = contract_states[0][j]
+                        past_state = contract_states[i][j]
+                        bias += self.get_bias(final_state, past_state)
+                        num_data_points += 1
+                except KeyError:
                     pass
-            if bias_denominator != 0.0:
-                points.append(Point(i, bias, bias_denominator))
-                # day_bias[i] = bias / bias_denominator
+            if num_data_points != 0:
+                points.append(Point(i, bias, num_data_points))
         return points
 
-    def get_contracts_from_market_id_and_date(self, market_id, market_date):
+    @staticmethod
+    def get_market_ids_from_snapshot(snapshot):
+        ids = []
+        for market in snapshot.markets:
+            ids.append(market.id)
+        return ids
 
+    def get_contracts_from_market_id_and_date(self, market_id, market_date):
         try:
             for market in self._snapshots[market_date].markets:
                 if market.id == market_id:
@@ -81,15 +100,11 @@ class NumberCruncher:
         bias = 0
         final_yes = self.parse_contract(final_contract)
         current_yes = self.parse_contract(current_contract)
-        # bias += (self.parse_cost(final_contract.bestBuyNoCost) - self.parse_cost(current_contract.bestBuyNoCost))
         bias += current_yes - final_yes
-        # bias += (self.parse_cost(final_contract.bestSellNoCost) - self.parse_cost(current_contract.bestSellNoCost))
-        # bias += (self.parse_cost(final_contract.bestSellYesCost) - self.parse_cost(current_contract.bestSellYesCost))
         return bias
 
     @staticmethod
     def parse_contract(contract):
-
         if contract.bestBuyYesCost is not None:
             return contract.bestBuyYesCost
         else:
