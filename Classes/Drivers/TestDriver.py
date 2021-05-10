@@ -1,5 +1,5 @@
 import unittest
-from Classes.Tests import TestsDataCollector, TestsDatabase, TestsHTMLWriter
+from Classes.Tests import TestsDataCollector, TestsDatabase, TestsHTMLWriter, TestsNumberCruncher
 
 
 def run_data_collector_tests():
@@ -20,7 +20,14 @@ def run_html_writer_tests():
     unittest.TextTestRunner().run(suite)
 
 
+def run_number_cruncher_tests():
+    print("Running NumberCruncher tests...")
+    suite = unittest.TestLoader().loadTestsFromModule(TestsNumberCruncher)
+    unittest.TextTestRunner().run(suite)
+
+
 if __name__ == '__main__':
-    run_data_collector_tests()
+    # run_data_collector_tests()
     run_database_tests()
     run_html_writer_tests()
+    run_number_cruncher_tests()

@@ -10,21 +10,21 @@ class NumberCruncher:
         self._snapshots = snapshots
 
         # Store snapshots in a dictionary accessible by date
-        self._snapshots_by_date = {}
-        for snapshot in self.snapshots:
-            self._snapshots_by_date[snapshot.time.date()] = snapshot
+        # self._snapshots_by_date = {}
+        # for snapshot in self.snapshots:
+        #     self._snapshots_by_date[snapshot.time.date()] = snapshot
 
         self._graph = self.crunch_numbers()
 
     def crunch_numbers(self):
-        self._snapshots.sort(key=lambda x: x.time, reverse=False)
         closed_markets = {}
-        for i in range(1, len(self._snapshots)):
-            yesterdays_markets = self._snapshots[i-1].markets
+        snapshot_list = list(self._snapshots.values())
+        for i in range(1, len(snapshot_list)):
+            yesterdays_markets = snapshot_list[i-1].markets
             yesterdays_market_ids = []
             for market in yesterdays_markets:
                 yesterdays_market_ids.append(market.id)
-            todays_markets = self._snapshots[i].markets
+            todays_markets = snapshot_list[i].markets
             todays_market_ids = []
             for market in todays_markets:
                 todays_market_ids.append(market.id)
@@ -68,7 +68,7 @@ class NumberCruncher:
     def get_contracts_from_market_id_and_date(self, market_id, market_date):
 
         try:
-            for market in self._snapshots_by_date[market_date].markets:
+            for market in self._snapshots[market_date].markets:
                 if market.id == market_id:
                     return market.contracts
         except(KeyError):

@@ -45,7 +45,18 @@ class Database:
         snapshots = []
         for file_name, file_contents in self.file_list.items():
             snapshots.append(Snapshot(file_name, file_contents))
-        return snapshots
+        snapshots_by_date = self.sort_snapshots(snapshots)
+        sorted_snapshots_by_date = {}
+        for date in sorted(snapshots_by_date):
+            sorted_snapshots_by_date[date] = snapshots_by_date[date]
+        return sorted_snapshots_by_date
+
+    @staticmethod
+    def sort_snapshots(snapshots):
+        snapshots_by_date = {}
+        for snapshot in snapshots:
+            snapshots_by_date[snapshot.time.date()] = snapshot
+        return snapshots_by_date
 
     @property
     def file_list(self):
