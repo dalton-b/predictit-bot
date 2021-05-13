@@ -19,7 +19,7 @@ class HTMLWriter:
 
     def write(self, file_name):
 
-        full_file_path = self.file_manager.combine_file_path_and_name(self.file_manager.root_dir, file_name)
+        full_file_path = self.file_manager.combine_file_path_and_name(self.file_manager.output_dir, file_name)
 
         with open(full_file_path, "w") as html_file:
             html_file.write(self.html_skeleton)

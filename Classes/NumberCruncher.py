@@ -1,7 +1,9 @@
+import csv
 from datetime import datetime, timedelta
 
 from Classes.Graph_Objects.Graph import Graph
 from Classes.Graph_Objects.Point import Point
+from Classes.FileManager import FileManager
 
 
 class NumberCruncher:
@@ -117,3 +119,13 @@ class NumberCruncher:
     @property
     def graph(self):
         return self._graph
+
+    def write_bias_graph_to_csv(self, file_name):
+        file_manager = FileManager()
+        full_path = file_manager.combine_file_path_and_name(file_manager.output_dir, file_name)
+        with open(full_path, 'w') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(["day", "bias", "num_data_points", "average_bias"])
+            for point in self.graph.points:
+                csv_writer.writerow([point.day, point.bias, point.num_data_points, point.average_bias])
+
