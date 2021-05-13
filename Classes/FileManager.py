@@ -5,10 +5,15 @@ class FileManager:
 
     def __init__(self):
         self._root_dir = self.get_root_directory()
+        self._output_dir = self._root_dir + "/output"
 
     @property
     def root_dir(self):
         return self._root_dir
+
+    @property
+    def output_dir(self):
+        return self._output_dir
 
     @staticmethod
     def get_root_directory():

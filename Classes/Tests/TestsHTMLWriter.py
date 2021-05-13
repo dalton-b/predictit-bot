@@ -11,7 +11,7 @@ class TestsHTMLWriter(unittest.TestCase):
         html_writer = HTMLWriter()
         html_writer.write(file_name)
         file_manager = FileManager()
-        full_path = file_manager.combine_root_dir_and_file_name(file_name)
+        full_path = file_manager.combine_file_path_and_name(file_manager.output_dir, file_name)
         with open(full_path) as file:
             data = file.read()
         os.remove(full_path)
