@@ -21,3 +21,8 @@ class Market(object):
     @property
     def get_contracts(self):
         return self.contracts
+
+    def contract_lookup(self, contract_id):
+        for contract in self.contracts:
+            if contract.id == contract_id:
+                return contract

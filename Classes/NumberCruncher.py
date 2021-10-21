@@ -137,17 +137,78 @@ class NumberCruncher:
             for point in self.graph.points:
                 csv_writer.writerow([point.day, point.bias, point.num_data_points, point.average_bias])
 
+    def market_lookup(self, market_id, date):
+        markets = self.snapshots[date].markets
+        for market in markets:
+            if market.id == market_id:
+                return market
+
     def get_markets_that_closed_on_end_date(self):
         markets_that_closed_on_end_date = {}
         closed_markets = self.get_closed_market_ids_and_dates();
         for closed_market, date in closed_markets.items():
-            markets = self.snapshots[date].markets
-            for market in markets:
-                if market.id == closed_market:
-                    close_date = market.contracts[0].dateEnd
-                    if close_date != 'NA':
-                        if self.parse_date(close_date) == date:
-                            markets_that_closed_on_end_date[closed_market] = date
+            market = self.market_lookup(closed_market, date)
+            close_date = market.contracts[0].dateEnd
+            if close_date != 'NA':
+                if self.parse_date(close_date) == date:
+                    markets_that_closed_on_end_date[closed_market] = date
         return markets_that_closed_on_end_date
+
+    def get_contract_of_choice(self, market_id, date, lookback):
+        lookback_date = date - timedelta(days=lookback)
+        try:
+            market = self.market_lookup(market_id, lookback_date)
+        except KeyError:
+            return None, None, None
+        if market is None:
+            return None, None, None
+        contracts = market.get_contracts
+        price = 0.0
+        type = ""
+        contract_id = 0
+        for contract in contracts:
+            if contract.bestBuyYesCost is not None:
+                if contract.bestBuyYesCost > price:
+                    price = contract.bestBuyYesCost
+                    type = "yes"
+                    contract_id = contract.id
+            if contract.bestSellYesCost is not None:
+                if contract.bestSellYesCost > price:
+                    price = contract.bestSellYesCost
+                    type = "yes"
+                    contract_id = contract.id
+            if contract.bestBuyNoCost is not None:
+                if contract.bestBuyNoCost > price:
+                    price = contract.bestBuyNoCost
+                    type = "no"
+                    contract_id = contract.id
+            if contract.bestSellNoCost is not None:
+                if contract.bestSellNoCost > price:
+                    price = contract.bestSellNoCost
+                    type = "no"
+                    contract_id = contract.id
+
+        return contract_id, price, type
+
+    def get_previous_price(self, market_id, contract_id, close_date, contract_option, lookback):
+        lookback_date = close_date - timedelta(days=lookback)
+        try:
+            market = self.market_lookup(market_id, lookback_date)
+        except KeyError:
+            return None
+        if market is None:
+            return None
+        contract = market.contract_lookup(contract_id)
+        if contract_option == "no":
+            if contract.bestBuyNoCost is not None:
+                return contract.bestBuyNoCost
+            else:
+                return contract.bestSellNoCost
+        elif contract_option == "yes":
+            if contract.bestBuyYesCost is not None:
+                return contract.bestBuyYesCost
+            else:
+                return contract.bestSellYesCost
+
 
 
