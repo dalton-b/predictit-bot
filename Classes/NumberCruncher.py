@@ -10,8 +10,8 @@ class NumberCruncher:
 
     def __init__(self, snapshots):
         self._snapshots = snapshots
-        self._lookback = 90
-        self._graph = self.crunch_numbers()
+        # self._lookback = 90
+        # self._graph = self.crunch_numbers()
 
     def crunch_numbers(self):
 
@@ -41,6 +41,14 @@ class NumberCruncher:
     @staticmethod
     def parse_market_date(market):
         return datetime.strptime(market.timeStamp.split("T")[0], "%Y-%m-%d").date()
+
+    @staticmethod
+    def parse_date(input_date):
+        try:
+            return datetime.strptime(input_date.split("T")[0], "%Y-%m-%d").date()
+        except ValueError:
+            return datetime.strptime(input_date.split(" ")[0], "%m/%d/%Y").date()
+            print("Ahhh!")
 
     @staticmethod
     def get_closed_market_ids(yesterday_ids, today_ids):
@@ -128,4 +136,18 @@ class NumberCruncher:
             csv_writer.writerow(["day", "bias", "num_data_points", "average_bias"])
             for point in self.graph.points:
                 csv_writer.writerow([point.day, point.bias, point.num_data_points, point.average_bias])
+
+    def get_markets_that_closed_on_end_date(self):
+        markets_that_closed_on_end_date = {}
+        closed_markets = self.get_closed_market_ids_and_dates();
+        for closed_market, date in closed_markets.items():
+            markets = self.snapshots[date].markets
+            for market in markets:
+                if market.id == closed_market:
+                    close_date = market.contracts[0].dateEnd
+                    if close_date != 'NA':
+                        if self.parse_date(close_date) == date:
+                            markets_that_closed_on_end_date[closed_market] = date
+        return markets_that_closed_on_end_date
+
 
