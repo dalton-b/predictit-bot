@@ -48,7 +48,6 @@ class NumberCruncher:
             return datetime.strptime(input_date.split("T")[0], "%Y-%m-%d").date()
         except ValueError:
             return datetime.strptime(input_date.split(" ")[0], "%m/%d/%Y").date()
-            print("Ahhh!")
 
     @staticmethod
     def get_closed_market_ids(yesterday_ids, today_ids):
@@ -210,5 +209,41 @@ class NumberCruncher:
             else:
                 return contract.bestSellYesCost
 
+    def get_contracts_of_choice(self, market_id, date, lookback, threshold):
+        lookback_date = date - timedelta(days=lookback)
+        try:
+            market = self.market_lookup(market_id, lookback_date)
+        except KeyError:
+            return None, None, None
+        if market is None:
+            return None, None, None
+        contracts = market.get_contracts
+        price = threshold
+        type = ""
+        contract_id = 0
+        contracts_of_choice = []
+        for contract in contracts:
+            if contract.bestBuyYesCost is not None:
+                if contract.bestBuyYesCost > price:
+                    type = "yes"
+                    contract_id = contract.id
+                    contracts_of_choice.append((contract_id, price, type))
+            if contract.bestSellYesCost is not None:
+                if contract.bestSellYesCost > price:
+                    type = "yes"
+                    contract_id = contract.id
+                    contracts_of_choice.append((contract_id, price, type))
+            if contract.bestBuyNoCost is not None:
+                if contract.bestBuyNoCost > price:
+                    type = "no"
+                    contract_id = contract.id
+                    contracts_of_choice.append((contract_id, price, type))
+            if contract.bestSellNoCost is not None:
+                if contract.bestSellNoCost > price:
+                    type = "no"
+                    contract_id = contract.id
+                    contracts_of_choice.append((contract_id, price, type))
+
+        return contracts_of_choice
 
 

@@ -9,15 +9,18 @@ closed_markets = number_cruncher.get_markets_that_closed_on_end_date()
 percent_profit = []
 num_num_data_points = []
 days_to_check = 60
+threshold = 0.89
 
 for day in range(0, days_to_check):
-    data_objects = [ExperimentOneDataObject(x, y) for x, y in closed_markets.items()]
+    data_objects = []
 
     agg_prices_close = 0.0
     agg_prices_pre_close = 0.0
     num_data_points = 0
     for data_object in data_objects:
-        contract_of_choice_id, contract_of_choice_price, contract_option = number_cruncher.get_contract_of_choice(data_object.market_id, data_object.close_date, day)
+        contract_of_choice_id, contract_of_choice_price, contract_option = number_cruncher.get_contracts_of_choice(data_object.market_id, data_object.close_date, day, threshold)
+
+        # Need to create new data objects, add all the qualities, etc
         data_object.set_contract_of_choice_id(contract_of_choice_id)
         data_object.set_price_pre_close(contract_of_choice_price)
         data_object.set_contract_option(contract_option)
