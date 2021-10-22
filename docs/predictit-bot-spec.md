@@ -9,3 +9,7 @@ __Hypothesis__: The aggregate of the website users estimates are usually correct
 __Experimental Design__: I want to look at closed markets with defined closing dates. Of these markets, I will check the contract values 30 days before the close of that market and select the contract with the highest share price as the Contract of Choice. I will take the difference the final CoC value and the current CoC value, that is, final_CoC - current_CoC. This will yield the profit (either positive or negative) earned by investing in the most popular choice. Aggregated over all available markets in the dataset, this will yield the profit earned by always following the crowd 30 days before a market closes.
 
 I will repeat this process for 60 and 90 days to market close.
+
+### Experiment 2
+
+__Hypothesis__: We can get better returns than we did in experiment 1 by taking not just the single contract with the highest value, but any contract above a certain threshold. For my preliminary tests, this threshold that I'll use is $0.90.
