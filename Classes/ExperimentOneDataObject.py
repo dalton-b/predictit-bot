@@ -5,14 +5,14 @@ class ExperimentOneDataObject(object):
         self.close_date = close_date
         self.contract_of_choice_id = None
         self.contract_option = None
-        self.price_30 = None
+        self.price_pre_close = None
         self.price_close = None
 
     def set_contract_of_choice_id(self, contract_id):
         self.contract_of_choice_id = contract_id
 
-    def set_price_30(self, price):
-        self.price_30 = price
+    def set_price_pre_close(self, price):
+        self.price_pre_close = price
 
     def set_price_close(self, price):
         self.price_close = price
