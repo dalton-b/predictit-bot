@@ -6,24 +6,19 @@ import matplotlib.pyplot as plt
 database = Database()
 number_cruncher = NumberCruncher(database.snapshots)
 closed_markets = number_cruncher.get_markets_that_closed_on_end_date()
+
+# Declare experiment outputs and parameters
 percent_profit = []
 num_num_data_points = []
 days_to_check = 60
 
 for day in range(0, days_to_check):
-    data_objects = [ExperimentOneDataObject(x, y) for x, y in closed_markets.items()]
 
+    data_objects = [ExperimentOneDataObject(x, y, day, database) for x, y in closed_markets.items()]
     agg_prices_close = 0.0
     agg_prices_pre_close = 0.0
     num_data_points = 0
     for data_object in data_objects:
-        contract_of_choice_id, contract_of_choice_price, contract_option = number_cruncher.get_contract_of_choice(data_object.market_id, data_object.close_date, day)
-        data_object.set_contract_of_choice_id(contract_of_choice_id)
-        data_object.set_price_pre_close(contract_of_choice_price)
-        data_object.set_contract_option(contract_option)
-
-        price_close = number_cruncher.get_previous_price(data_object.market_id, data_object.contract_of_choice_id, data_object.close_date, data_object.contract_option, 0)
-        data_object.set_price_close(price_close)
 
         if data_object.price_pre_close is not None and data_object.price_close is not None:
             agg_prices_pre_close += data_object.price_pre_close

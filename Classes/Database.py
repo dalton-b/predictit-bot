@@ -78,3 +78,9 @@ class Database:
     @property
     def root(self):
         return self._root
+
+    def market_lookup(self, market_id, date):
+        markets = self.snapshots[date].markets
+        for market in markets:
+            if market.id == market_id:
+                return market
