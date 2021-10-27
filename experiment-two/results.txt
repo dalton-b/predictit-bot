@@ -1,1 +1,1 @@
-Average returns: 0.9000264127608625
+Average profit: 0.584166666666667

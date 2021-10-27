@@ -16,9 +16,6 @@ num_num_contracts = []
 lookback = 60
 
 for day in range(0, lookback):
-
-    if day > 10:
-        hello = 0
     agg_profit = 0.0
     num_contracts = 0
     for closed_market_id, closed_market_date in closed_markets_dict.items():
@@ -47,12 +44,28 @@ for day in range(0, lookback):
                             data_object.set_close_price(closed_contract.bestSellNoCost)
                         # if closed_contract.bestBuyNoCost is not None:
                         #     data_object.set_close_price(closed_contract.bestBuyNoCost)
-                    pass
                     agg_profit += data_object.profit
                     num_contracts += 1
     agg_profits.append(agg_profit)
     num_num_contracts.append(num_contracts)
 
-    pass
-pass
+fig, ax = plt.subplots()
+ax.plot(agg_profits)
+ax.set_xlim(lookback, 0)
+ax.set_title("Aggregate Profits with $" + str(threshold) + " Threshold - Experiment 2")
+ax.set_xlabel("Days to Market Close")
+ax.set_ylabel("Aggregate Profits")
+plt.savefig("experiment-two/agg_profit_60_day.png")
+plt.close()
+
+with open('experiment-two/results.txt', 'w') as f:
+    f.write("Average profit: " + str(sum(agg_profits) / len(agg_profits)))
+
+fig, ax = plt.subplots()
+ax.plot(num_num_contracts)
+ax.set_xlim(lookback, 0)
+ax.set_title("Number of Contracts Per Day Before Market Close")
+ax.set_xlabel("Days to Market Close")
+ax.set_ylabel("Number of Contracts")
+plt.savefig("experiment-two/num_contracts.png")
 
