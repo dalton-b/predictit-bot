@@ -12,11 +12,14 @@ threshold = 0.89
 viable_contracts_close = []
 agg_profits = []
 num_num_contracts = []
+agg_percent_profits = []
 
 lookback = 60
 
 for day in range(0, lookback):
     agg_profit = 0.0
+    agg_current_price = 0.0
+    agg_close_price = 0.0
     num_contracts = 0
     for closed_market_id, closed_market_date in closed_markets_dict.items():
         proceed = True
@@ -45,17 +48,20 @@ for day in range(0, lookback):
                         # if closed_contract.bestBuyNoCost is not None:
                         #     data_object.set_close_price(closed_contract.bestBuyNoCost)
                     agg_profit += data_object.profit
+                    agg_current_price += data_object.current_price
+                    agg_close_price += data_object.close_price
                     num_contracts += 1
     agg_profits.append(agg_profit)
+    agg_percent_profits.append(agg_close_price / agg_current_price)
     num_num_contracts.append(num_contracts)
 
 fig, ax = plt.subplots()
-ax.plot(agg_profits)
+ax.plot(agg_percent_profits)
 ax.set_xlim(lookback, 0)
-ax.set_title("Aggregate Profits with $" + str(threshold) + " Threshold - Experiment 2")
+ax.set_title("Percent Profits with $" + str(threshold) + " Threshold - Experiment 2")
 ax.set_xlabel("Days to Market Close")
-ax.set_ylabel("Aggregate Profits")
-plt.savefig("experiment-two/agg_profit_60_day.png")
+ax.set_ylabel("Percent Profits")
+plt.savefig("experiment-two/pct_profit_60_day.png")
 plt.close()
 
 with open('experiment-two/results.txt', 'w') as f:
